@@ -1,0 +1,30 @@
+# Mammal R Code
+#Import and separate trees out of multiphylo
+library(ape)
+library(caper)
+mammals<-read.nexus("~/Desktop/mammal_tree.nex")
+bestdates<-mammals$mammalST_bestDates
+lowerdates<-mammals$mammalST_lowerDates
+upperdates<-mammals$mammalST_upperDates
+
+#calculate ED
+ed.calc(mammals$mammalST_bestDates)
+ed.calc(mammals$mammalST_lowerDates)
+ed.calc(mammals$mammalST_upperDates)
+
+
+#create dataset of branches to trim
+AllMammalED<-read.csv("~/Dropbox/ESA CH/AllMammalED.csv",as.is=TRUE)
+notcontm<-subset(AllMammalED,cont_us==0)
+
+dropm<-notcontm$species
+
+#trim branches to only US species
+UsMammalEDbest<-drop.tip(bestdates,drop)
+UsMammalEDlower<-drop.tip(lowerdates,drop)
+UsMammalEDupper<-drop.tip(upperdates,drop)
+
+#calculate US ED
+ed.calc(UsMammalEDbest)
+ed.calc(UsMammalEDlower)
+ed.calc(UsMammalEDupper)
