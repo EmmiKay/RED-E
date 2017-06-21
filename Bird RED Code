@@ -1,0 +1,68 @@
+#Bird ED R Code
+library(ape)
+library(caper)
+birds<-read.tree("~/Dropbox/ESA CH/Bird/AllBirdsEricson1.tre")
+
+# loop for taking ED from 1000 bird trees
+
+temp.list<-NULL
+temp.ed<-NULL
+spp.ed<-NULL
+output.ed<-NULL
+	
+temp.list<-ed.calc(birds[[1]])
+names<-temp.list$spp
+names<-names$species
+
+for (i in 1:1000)
+{
+temp.list<-ed.calc(birds[[i]])
+spp.ed<-temp.list$spp
+temp.ed<-spp.ed$ED
+output.ed<-cbind(output.ed,temp.ed)  
+}
+
+#averaging
+meanED<-rowMeans(output.ed)
+	
+#global output
+write.csv(meanED,file="~/Dropbox/ESA CH/bird/birdEDmean")
+	
+
+#bring in list of species to trim
+AllBirdED<-read.csv("~/Dropbox/ESA CH/Bird/AllBirdED.csv",as.is=TRUE)
+
+#select species to trim
+notcont<-subset(AllBirdED,US==0)
+drop<-notcont$Species
+
+#trim tree and change back to multiphylo
+USbirds<-lapply(birds,drop.tip,drop)
+class(USbirds)<-"multiPhylo"
+
+#loop for ED of 1000 trees
+temp.list<-NULL
+temp.ed<-NULL
+spp.ed<-NULL
+output.ed<-NULL
+
+
+temp.list<-ed.calc(USbirds[[1]])
+names<-temp.list$tip.label
+names<-names$tip.label
+
+
+for (i in 1:1000)
+  {
+	  temp.list<-ed.calc(USbirds[[i]])
+	  spp.ed<-temp.list$spp
+	  temp.ed<-spp.ed$ED
+	  output.ed<-cbind(output.ed,temp.ed)  
+	}
+
+#averaging
+meanED<-rowMeans(output.ed)
+USbirds.name<-cbind(names,MeanED)
+
+#US only output
+write.csv(meanED,file="~/Dropbox/ESA CH/bird/USbirdEDmean"
