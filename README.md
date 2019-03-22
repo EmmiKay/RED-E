@@ -1,5 +1,6 @@
 # RED-E
-Regional Evolutionary Distinctiveness and Endangerment R Code
+Regional Evolutionary Distinctiveness and Endangerment R Code - it's rough,
+but I'm leaving it this way so that I can see where I came from.
 
 This was my first ever coding project that was a part of my MS thesis. 
 
